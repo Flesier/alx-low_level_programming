@@ -1,5 +1,10 @@
 #include <stdio.h>
-
+/**
+*main - Entry point
+*Description: slicing an array
+*
+*Return:Always 0 (Success)
+*/
 int main(void)
 {
 	int n;
