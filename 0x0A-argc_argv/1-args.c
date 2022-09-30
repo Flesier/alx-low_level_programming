@@ -1,11 +1,11 @@
 #include "main.h"
 
-/*Authored by Flesier*/
+/*By Flesier*/
 /*Function file*/
 /*Betty Lint Coding and format style*/
 
 /**
- * main - Entry point : Print the name of the file followed by a new line..
+ * main - Entry point : Prints the number of arguments passed into it.
  *
  * @argv: Declare an array variable of Char type.
  *
@@ -13,11 +13,8 @@
  *
  * Return: 0 on no return and 1 on success and -1 on error(stderr)
  */
-int main(int argc, char *argv[])
+int main(int argc, char *argv[] __attribute__((unused)))
 {
-	(void) argc;
-
-	printf("%s\n", argv[0]);
-
+	printf("%d\n", argc - 1);
 	return (0);
 }
