@@ -1,69 +1,147 @@
+#include "main.h"
 #include <stdlib.h>
 
-char *_memcpy(char *dest, char *src, unsigned int n);
-
 /**
-* _realloc - allocates memory block using malloc and free
-* @ptr: pointer to the memory previosly allocated with malloc
-* @old_size: The size of the allocated space of ptr
-* @new_size: The new size to allocate
-*
-* Description: allocates a new memory block for the pointer,
-* using the contents from the original pointer, copiyng up to the
-* minimum of the old and new sizes.
-* If new_size > old_size, the added memory should not be intialized
-* If new_size == old_size, returns the same pointer
-* If ptr == NULL, call is equivalent to malloc(new_size)
-* If new_size == 0 and ptr != NULL, call is equivalent to free(ptr),
-*  and return NULL.
-*
-* Return: A pointer to the new allocated memory and free ptr.
-* NULL if can not allocate memory
-*/
-void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
-{
-	char *p;
-
-	if (new_size == old_size)
-		return (ptr);
-
-	if (new_size == 0 && ptr != NULL)
-	{
-		free(ptr);
-		return (NULL);
-	}
-
-	p = malloc(new_size);
-
-	if (p == NULL)
-		return (NULL);
-
-	if (ptr == NULL)
-		return (p);
-
-	p = _memcpy(p, ptr, (new_size > old_size ? old_size : new_size));
-	free(ptr);
-	return (p);
-}
-
-/**
-* _memcpy - copies the memory are from
-* src to dest
-* @dest: The destination pointer
-* @src: The source pointer
-* @n: bytes to use from src
-*
-* Return: The pointer to dest
+ * _print - moves a string one place to the left and prints the string
+ * @str: string to move
+ * @l: size of string
+ *
+ * Return: void
  */
-char *_memcpy(char *dest, char *src, unsigned int n)
+void _print(char *str, int l)
 {
-	unsigned int i = 0;
+	int i, j;
 
-	while (i < n)
+	i = j = 0;
+	while (i < l)
 	{
-		*(dest + i) = *(src + i);
+		if (str[i] != '0')
+			j = 1;
+		if (j || i == l - 1)
+			_putchar(str[i]);
 		i++;
 	}
 
+	_putchar('\n');
+	free(str);
+}
+
+/**
+ * mul - multiplies a char with a string and places the answer into dest
+ * @n: char to multiply
+ * @num: string to multiply
+ * @num_index: last non NULL index of num
+ * @dest: destination of multiplication
+ * @dest_index: highest index to start addition
+ *
+ * Return: pointer to dest, or NULL on failure
+ */
+char *mul(char n, char *num, int num_index, char *dest, int dest_index)
+{
+	int j, k, mul, mulrem, add, addrem;
+
+	mulrem = addrem = 0;
+	for (j = num_index, k = dest_index; j >= 0; j--, k--)
+	{
+		mul = (n - '0') * (num[j] - '0') + mulrem;
+		mulrem = mul / 10;
+		add = (dest[k] - '0') + (mul % 10) + addrem;
+		addrem = add / 10;
+		dest[k] = add % 10 + '0';
+	}
+	for (addrem += mulrem; k >= 0 && addrem; k--)
+	{
+		add = (dest[k] - '0') + addrem;
+		addrem = add / 10;
+		dest[k] = add % 10 + '0';
+	}
+	if (addrem)
+	{
+		return (NULL);
+	}
 	return (dest);
+}
+/**
+ * check_for_digits - checks the arguments to ensure they are digits
+ * @av: pointer to arguments
+ *
+ * Return: 0 if digits, 1 if not
+ */
+int check_for_digits(char **av)
+{
+	int i, j;
+
+	for (i = 1; i < 3; i++)
+	{
+		for (j = 0; av[i][j]; j++)
+		{
+			if (av[i][j] < '0' || av[i][j] > '9')
+				return (1);
+		}
+	}
+	return (0);
+}
+
+/**
+ * init - initializes a string
+ * @str: sting to initialize
+ * @l: length of strinf
+ *
+ * Return: void
+ */
+void init(char *str, int l)
+{
+	int i;
+
+	for (i = 0; i < l; i++)
+		str[i] = '0';
+	str[i] = '\0';
+}
+
+/**
+ * main - multiply two numbers
+ * @argc: number of arguments
+ * @argv: argument vector
+ *
+ * Return: zero, or exit status of 98 if failure
+ */
+int main(int argc, char *argv[])
+{
+	int l1, l2, ln, ti, i;
+	char *a;
+	char *t;
+	char e[] = "Error\n";
+
+	if (argc != 3 || check_for_digits(argv))
+	{
+		for (ti = 0; e[ti]; ti++)
+			_putchar(e[ti]);
+		exit(98);
+	}
+	for (l1 = 0; argv[1][l1]; l1++)
+		;
+	for (l2 = 0; argv[2][l2]; l2++)
+		;
+	ln = l1 + l2 + 1;
+	a = malloc(ln * sizeof(char));
+	if (a == NULL)
+	{
+		for (ti = 0; e[ti]; ti++)
+			_putchar(e[ti]);
+		exit(98);
+	}
+	init(a, ln - 1);
+	for (ti = l2 - 1, i = 0; ti >= 0; ti--, i++)
+	{
+		t = mul(argv[2][ti], argv[1], l1 - 1, a, (ln - 2) - i);
+		if (t == NULL)
+		{
+			for (ti = 0; e[ti]; ti++)
+				_putchar(e[ti]);
+			free(a);
+			exit(98);
+		}
+	}
+	_print(a, ln - 1);
+	return (0);
 }
