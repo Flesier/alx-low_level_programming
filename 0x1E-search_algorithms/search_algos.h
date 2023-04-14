@@ -5,39 +5,40 @@
 #include <stdio.h>
 
 /**
- * struct list - singly linked list
- * 
- * @n: Int
- * @index: Index in the list
- * @next: Pointer to next node
- * 
- * Description: Singly linked list node structure
-*/
+ * struct listint_s - singly linked list
+ *
+ * @n: Integer
+ * @index: Index of the node in the list
+ * @next: Pointer to the next node
+ *
+ * Description: singly linked list node structure
+ * for Holberton project
+ */
 typedef struct listint_s
 {
-    int n;
-    size_t index;
-    struct listint_s *next;
-}listint_t;
+	int n;
+	size_t index;
+	struct listint_s *next;
+} listint_t;
 
 /**
  * struct skiplist_s - Singly linked list with an express lane
- * 
- * @n: Int
- * @index: Index of node in the list
+ *
+ * @n: Integer
+ * @index: Index of the node in the list
  * @next: Pointer to the next node
- * @express: Pointer to the next node in express lane
- * 
- * Description: Singly linked list node structure with express lane
- * 
-*/
-typedef struct skiplistint_s
+ * @express: Pointer to the next node in the express lane
+ *
+ * Description: singly linked list node structure with an express lane
+ * for Holberton project
+ */
+typedef struct skiplist_s
 {
-    int n;
-    size_t index;
-    struct skiplistint_s *next;
-    struct skiplistint_s *express;
-}skiplist_t;
+	int n;
+	size_t index;
+	struct skiplist_s *next;
+	struct skiplist_s *express;
+} skiplist_t;
 
 int linear_search(int *array, size_t size, int value);
 int binary_search(int *array, size_t size, int value);
